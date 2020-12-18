@@ -50,6 +50,7 @@
 
     <!-- Your styles -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/scss/main.css">
   </head>
   <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -62,11 +63,12 @@
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
         </div>
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-          <a href="#overview" class="mdl-layout__tab is-active">Bacon</a>
+          <a href="#overview" class="mdl-layout__tab">Bacon</a>
+          <a href="#checkout" class="mdl-layout__tab is-active">Checkout</a>
         </div>
       </header>
       <main class="mdl-layout__content">
-        <div class="mdl-layout__tab-panel is-active" id="overview">
+        <div class="mdl-layout__tab-panel" id="overview">
           <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
             <button type="button" onclick="cloneBacon()">Yeah, I want more bacon!</button>
           </section>
@@ -74,6 +76,108 @@
             <img src="http://media.washtimes.com.s3.amazonaws.com/media/image/2015/02/23/bacon.jpg" alt="Bacon" style="width: 100%; height: 100%;">
           </section>
         </div>
+        <div class="mdl-layout__tab-panel bg-grey is-active" id="checkout">
+          <div class="checkout">
+            <!-- Input Fields -->
+            <form class="field-groups">
+              <div class="field-group">
+                <p class="field-group__title">
+                  <span class="field-group__title__position">1</span> personal information
+                </p>
+                <div class="fields">
+                  <div class="input">
+                    <input type="text" name="first_name" id="first_name" placeholder="Elon">
+                    <label for="first_name">first name</label>
+                  </div>
+                  <div class="input">
+                    <input type="text" name="last_name" id="last_name" placeholder="Musk">
+                    <label for="last_name">last name</label>
+                  </div>
+                  <div class="input">
+                    <input type="email" name="email" id="email" placeholder="nelson@nelsonatuonwu.me">
+                    <label for="email">Email</label>
+                  </div>
+                  <div class="input">
+                    <select name="country" id="country" aria-placeholder="placeholder">
+                      <option value="0" selected disabled>Select a country</option>
+                      <option value="">Nigeria</option>
+                      <option value="">India</option>
+                      <option value="">Cotonu</option>
+                    </select>
+                    <label for="country">Country</label>
+                  </div>
+                  <div class="input">
+                    <input type="text" name="postal_code" id="postal_code" placeholder="110001">
+                    <label for="postal_code">postal code</label>
+                  </div>
+                  <div class="input">
+                    <input type="text" name="phone_number" id="phone_number" placeholder="(212) - 555 - 3422">
+                    <label for="phone_number">Phone Number</label>
+                  </div>
+                </div>
+              </div>
+              <div class="field-group">
+                <p class="field-group__title">
+                  <span class="field-group__title__position">2</span> payment details
+                </p>
+                <div class="fields fields--reverse">
+                  <div class="input--image">
+                    <div class="input">
+                      <input type="text" name="credit_card" id="credit_card" placeholder="0000 - 0000 - 00000 - 0000">
+                      <label for="credit_card">Credit Card Number</label>
+                    </div>
+                    <img src="/images/visa.svg" alt="">
+                  </div>
+                  <div class="input--image">
+                    <div class="input">
+                      <input type="text" name="security_code" id="security_code" placeholder="***">
+                      <label for="security_code">Security Code</label>
+                    </div>
+                    <img src="/images/information.svg" alt="">
+                  </div>
+                  <div class="input">
+                    <input type="text" name="expiration_date" id="expiration_date" placeholder="MM/YY">
+                    <label for="expiration_date">Expiration Date</label>
+                  </div>
+                </div>
+              </div>
+              <button class="btn">complete purchase</button>
+            </form>
+
+            <!-- Cart -->
+            <div class="cart">
+              <div class="cart-body">
+                <p class="cart-body__title">your order</p>
+                <div class="cart-body__items">
+                  <div class="cart-item">
+                    <p>House</p>
+                    <p>$ 500</p>
+                  </div>
+                  <div class="cart-item">
+                    <p>House</p>
+                    <p>$ 500</p>
+                  </div>
+                </div>
+                <div class="cart-body__items">
+                  <div class="cart-item">
+                    <p>House</p>
+                    <p>$ 500</p>
+                  </div>
+                  <div class="cart-item">
+                    <p>House</p>
+                    <p>$ 500</p>
+                  </div>
+                </div>
+                <div class="cart-footer">
+                  <p>Total</p>
+                  <p class="cart-footer__price">$900</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
         <footer class="mdl-mega-footer">
           <div class="mdl-mega-footer--middle-section">
             <div class="mdl-mega-footer--drop-down-section">
