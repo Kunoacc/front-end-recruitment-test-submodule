@@ -86,33 +86,39 @@
                 </p>
                 <div class="fields">
                   <div class="input">
-                    <input type="text" name="first_name" id="first_name" placeholder="Elon" required>
+                    <input type="text" name="first_name" id="first_name" placeholder="Elon">
                     <label for="first_name">first name</label>
+                    <span class="input__error"></span>
                   </div>
                   <div class="input">
-                    <input type="text" name="last_name" id="last_name" placeholder="Musk" required>
+                    <input type="text" name="last_name" id="last_name" placeholder="Musk">
                     <label for="last_name">last name</label>
+                    <span class="input__error"></span>
                   </div>
                   <div class="input">
-                    <input type="email" name="email" id="email" placeholder="nelson@nelsonatuonwu.me" required>
+                    <input type="email" name="email" id="email" placeholder="nelson@nelsonatuonwu.me">
                     <label for="email">Email</label>
+                    <span class="input__error"></span>
                   </div>
                   <div class="input">
-                    <select name="country" id="country" aria-placeholder="placeholder" required>
-                      <option value="0" selected disabled>Select a country</option>
+                    <select name="country" id="country" aria-placeholder="placeholder">
+                      <option value="" selected disabled>Select a country</option>
                       <option value="nigeria">Nigeria</option>
                       <option value="india">India</option>
                       <option value="">Cotonu</option>
                     </select>
                     <label for="country">Country</label>
+                    <span class="input__error"></span>
                   </div>
                   <div class="input">
-                    <input type="text" name="postal_code" id="postal_code" placeholder="110001" required>
+                    <input type="text" name="postal_code" id="postal_code" placeholder="110001">
                     <label for="postal_code">postal code</label>
+                    <span class="input__error"></span>
                   </div>
                   <div class="input">
-                    <input type="text" name="phone_number" id="phone_number" placeholder="(212) - 555 - 3422" required>
+                    <input type="text" name="phone_number" id="phone_number" placeholder="(212) - 555 - 3422">
                     <label for="phone_number">Phone Number</label>
+                    <span class="input__error"></span>
                   </div>
                 </div>
               </div>
@@ -125,21 +131,24 @@
                 <div class="fields fields--reverse">
                   <div class="input--image">
                     <div class="input">
-                      <input type="text" name="credit_card" id="credit_card" placeholder="0000 - 0000 - 00000 - 0000" required>
+                      <input type="text" name="credit_card" id="credit_card" placeholder="0000 - 0000 - 00000 - 0000">
                       <label for="credit_card">Credit Card Number</label>
+                      <span class="input__error"></span>
                     </div>
                     <img src="/images/visa.svg" alt="">
                   </div>
                   <div class="input--image">
                     <div class="input">
-                      <input type="text" name="security_code" id="security_code" placeholder="***" required>
+                      <input type="text" name="security_code" id="security_code" placeholder="***">
                       <label for="security_code">Security Code</label>
+                      <span class="input__error"></span>
                     </div>
                     <img src="/images/information.svg" alt="">
                   </div>
                   <div class="input">
-                    <input type="text" name="expiration_date" id="expiration_date" placeholder="MM/YY" required>
+                    <input type="text" name="expiration_date" id="expiration_date" placeholder="MM/YY">
                     <label for="expiration_date">Expiration Date</label>
+                    <span class="input__error"></span>
                   </div>
                 </div>
               </div>
@@ -150,23 +159,11 @@
             <div class="cart">
               <div class="cart-body">
                 <p class="cart-body__title">your order</p>
-                <div class="cart-body__items">
-                  <div class="cart-item">
-                    <p>House</p>
-                    <p>$ 500</p>
-                  </div>
-                  <div class="cart-item">
-                    <p>House</p>
-                    <p>$ 500</p>
-                  </div>
+                <div class="cart-body__items" id="cart_items">
                 </div>
-                <div class="cart-body__items">
+                <div class="cart-body__items" id="tax">
                   <div class="cart-item">
-                    <p>House</p>
-                    <p>$ 500</p>
-                  </div>
-                  <div class="cart-item">
-                    <p>House</p>
+                    <p>Tax</p>
                     <p>$ 500</p>
                   </div>
                 </div>
@@ -265,6 +262,7 @@
         const bacon = document.querySelector('img[alt=Bacon]')
         const baconParent = bacon.parentElement
         baconParent.appendChild(bacon.cloneNode(true))
+        generateBaconCheckout()
       }
 
       function showSnackbar(message){
@@ -273,7 +271,6 @@
           message,
           timeout: (message.length * 100) < 3000 ? 3000 : (message.length * 100)
         }
-        console.log(snackbar.MaterialSnackbar)
         snackbar.MaterialSnackbar.showSnackbar(snackbarData)
       }
 
@@ -282,6 +279,18 @@
         const elementsArray = [...event.target.elements]
         const formData = elementsArray.reduce((accumulator, element) => {
           if (element.id && element.name) {
+            // Check if parent element is input wrapper for inputs with images
+            const elementHasImageWrapper = element.parentElement.parentElement.className.includes('input--image')
+            const parentElement = elementHasImageWrapper ? element.parentElement.parentElement : element.parentElement
+            const errorMessageElement = document.querySelector(`#${element.id} ~ .input__error`)
+            console.log(errorMessageElement)
+            if (!element?.value) {
+              errorMessageElement.textContent = `${element.id.replace('_', ' ')} is required`
+              parentElement.classList.add('input--error')
+            } else {
+              errorMessageElement.innerHTML = ``
+              parentElement.classList.remove('input--error')
+            }
             accumulator[element.id] = element?.value
           }
           return accumulator
@@ -298,14 +307,49 @@
         let message = 'The following fields are required: '
         for (const key in formData) {
           if (Object.hasOwnProperty.call(formData, key)) {
-            const element = formData[key]
-            if (!element) {
-              message += `${key} ,`
+            const value = formData[key]
+            if (!value) {
+              message += `${key.replace('_', ' ')}, `
             }
           }
         }
-        return message.slice(0, message.length - 1)
+        return message.slice(0, message.length - 2)
       }
+
+      function generateBaconCheckout(){
+        const bacon = document.querySelectorAll('img[alt=Bacon]')
+        const BACON_PRICE = 100
+        const baconQuantity = bacon.length
+        const cartPrice = BACON_PRICE * baconQuantity
+        const tax = (5/100) * cartPrice
+        const total = tax + cartPrice
+
+        const cartItemsParent = document.querySelector("#cart_items")
+        const taxContainer = document.querySelector('#tax')
+        const totalContainer = document.querySelector('.cart-footer__price')
+
+        const cartItem = document.createElement("div")
+        cartItem.classList.add('cart-item')
+        const taxItem = cartItem.cloneNode(true)
+
+        const [ itemTitle, itemPrice ] = [document.createElement('p'), document.createElement('p')]
+        itemTitle.textContent = 'Bacon'
+        itemPrice.textContent = `$${BACON_PRICE}`
+        cartItem.appendChild(itemTitle)
+        cartItem.appendChild(itemPrice)
+        cartItemsParent.appendChild(cartItem)
+        
+        const [ taxTitle, taxPrice ] = [document.createElement('p'), document.createElement('p')]
+        taxTitle.textContent = 'Tax'
+        taxPrice.textContent = `$${tax}`
+        taxItem.appendChild(taxTitle)
+        taxItem.appendChild(taxPrice)
+        taxContainer.replaceChild(taxItem, taxContainer.firstElementChild)
+
+        totalContainer.textContent = `$${total}`
+      }
+
+      generateBaconCheckout()
     </script>
     <!-- Built with love using Web Starter Kit -->
   </body>
